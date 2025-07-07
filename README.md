@@ -56,6 +56,12 @@ npm run dev
 
 ---
 
+## 📸 Screenshots (optional)
+
+> _Add screenshots of the homepage, cart dropdown, admin panel, etc._
+
+---
+
 ## 📦 Folder Structure
 
 ```
