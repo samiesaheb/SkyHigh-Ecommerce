@@ -3,8 +3,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from products.models import Product
 
+from django.conf import settings
+
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=100)
     email = models.EmailField()
     address = models.TextField()

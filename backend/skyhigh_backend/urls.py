@@ -18,9 +18,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from core.admin_analytics import get_analytics_urls
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    *get_analytics_urls(),
+    path("admin/", admin.site.urls),    
 
     # 🛠 API endpoints
     path("api/", include("core.urls")),
@@ -28,6 +30,7 @@ urlpatterns = [
     path("api/account/", include("accounts.urls")),       # ✅ profile, contact, etc.
     # path("api/csrf/", get_csrf_token),                # CSRF endpoint
     path("api/orders/", include("orders.urls")),
+    path("accounts/", include("allauth.urls")),
 
 
     # Optionally remove this:

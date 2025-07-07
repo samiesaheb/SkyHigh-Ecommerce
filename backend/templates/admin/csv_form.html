@@ -1,0 +1,39 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+  <h1>{{ title }}</h1>
+
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    {% if rows %}
+      <h2>Preview:</h2>
+      <table class="adminlist">
+        <thead>
+          <tr>
+            {% for key in rows.0.keys %}
+              <th>{{ key }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+            <tr>
+              {% for val in row.values %}
+                <td>{{ val }}</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p style="margin-top:1em">
+        <strong>Check "Confirm import?" and re-submit to finalize the import.</strong>
+      </p>
+    {% endif %}
+
+    <input type="submit" value="Upload CSV" class="default">
+    <a href="../" class="button cancel-link">Cancel</a>
+  </form>
+{% endblock %}

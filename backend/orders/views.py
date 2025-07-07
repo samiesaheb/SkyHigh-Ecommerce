@@ -117,8 +117,9 @@ def checkout(request):
 @permission_classes([IsAuthenticated])
 def get_order_history(request):
     orders = Order.objects.filter(user=request.user).order_by("-created_at")
-    serializer = OrderSerializer(orders, many=True)
+    serializer = OrderSerializer(orders, many=True, context={'request': request})  # ✅ fixed
     return Response(serializer.data)
+
 
 
 @api_view(["GET"])
