@@ -13,5 +13,7 @@ gunicorn
 whitenoise
 django-allauth
 dj-rest-auth
+PyJWT
+cryptography
 stripe
 django-import-export
