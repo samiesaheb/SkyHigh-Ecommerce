@@ -3,3 +3,15 @@ djangorestframework
 django-cors-headers
 Pillow
 stripe
+Django==5.2.3
+djangorestframework
+django-cors-headers
+python-dotenv
+dj-database-url
+psycopg2-binary
+gunicorn
+whitenoise
+django-allauth
+dj-rest-auth
+stripe
+django-import-export
