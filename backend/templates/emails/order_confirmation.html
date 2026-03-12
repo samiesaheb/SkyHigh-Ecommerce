@@ -1,0 +1,81 @@
+{% extends "emails/base.html" %}
+
+{% block title %}Order Confirmation #{{ order.id }} - {{ company_name }}{% endblock %}
+
+{% block header_title %}Order Confirmed!{% endblock %}
+{% block header_subtitle %}Thank you for your purchase{% endblock %}
+
+{% block content %}
+<h2>Hi {{ order.full_name }}! 👋</h2>
+
+<p>Thank you for your order! We've received your payment and are preparing your beautiful cosmetic products.</p>
+
+<div class="order-details">
+    <div class="info-grid">
+        <div>
+            <h3 style="margin-bottom: 10px; color: #1f2937;">Order Information</h3>
+            <p><strong>Order Number:</strong> #{{ order.id }}</p>
+            <p><strong>Order Date:</strong> {{ order_date }}</p>
+            <p><strong>Payment Status:</strong>
+                <span class="status-badge {% if order.is_paid %}status-paid{% else %}status-pending{% endif %}">
+                    {{ payment_status }}
+                </span>
+            </p>
+        </div>
+        <div>
+            <h3 style="margin-bottom: 10px; color: #1f2937;">Shipping Address</h3>
+            <p>{{ order.full_name }}</p>
+            <p>{{ order.address }}</p>
+            <p>{{ order.city }}, {{ order.zip }}</p>
+            <p>{{ order.country }}</p>
+        </div>
+    </div>
+</div>
+
+<h3 style="color: #1f2937; margin: 24px 0 16px 0;">Items Ordered</h3>
+<table class="order-summary">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>฿{{ item.price|floatformat:2 }}</td>
+            <td>฿{{ item.subtotal|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="3" class="total"><strong>Total</strong></td>
+            <td class="total"><strong>฿{{ total_amount|floatformat:2 }}</strong></td>
+        </tr>
+    </tbody>
+</table>
+
+<p style="margin: 24px 0;">
+    <strong>What happens next?</strong><br>
+    • We'll prepare your order within 1-2 business days<br>
+    • You'll receive a shipping confirmation email with tracking information<br>
+    • Your order should arrive within 3-5 business days
+</p>
+
+<div style="text-align: center; margin: 32px 0;">
+    <a href="https://skyhigh-inter.com/order-status/{{ order.id }}" class="button">
+        Track Your Order
+    </a>
+</div>
+
+<p style="margin: 24px 0; padding: 20px; background-color: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 4px;">
+    <strong>💄 Beauty Tip:</strong> For best results, store your cosmetic products in a cool, dry place away from direct sunlight.
+</p>
+
+<p>Thank you for choosing {{ company_name }}! If you have any questions about your order, please don't hesitate to contact us.</p>
+
+<p style="margin-top: 32px; font-style: italic;">Stay beautiful! ✨</p>
+{% endblock %}

@@ -1,19 +1,3 @@
-"""
-URL configuration for skyhigh_backend project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -22,20 +6,37 @@ from core.admin_analytics import get_analytics_urls
 
 urlpatterns = [
     *get_analytics_urls(),
-    path("admin/", admin.site.urls),    
+    path("admin/", admin.site.urls),
 
-    # 🛠 API endpoints
-    path("api/", include("core.urls")),
-    path("api/products/", include("products.urls")),  # clean prefix for product routes
-    path("api/account/", include("accounts.urls")),       # ✅ profile, contact, etc.
-    # path("api/csrf/", get_csrf_token),                # CSRF endpoint
-    path("api/orders/", include("orders.urls")),
+    # ✅ New centralized API structure
+    path("api/v1/", include([
+        path("core/", include("core.urls")),
+        path("products/", include("api.v1.products.urls")),
+        path("accounts/", include("api.v1.accounts.urls")),
+        path("orders/", include("api.v1.orders.urls")),
+        path("cart/", include("cart.urls")),
+        path("reviews/", include("reviews.urls")),
+        path("quotes/", include("apps.quotes.urls")),
+        path("mobile/", include("api.v1.mobile.urls")),
+    ])),
+
+    # ✅ Keep legacy API endpoints for backward compatibility
+    path("api/", include([
+        path("", include("core.urls")),             # /api/csrf/, /api/account/user/
+        path("products/", include("products.urls")),# /api/products/...
+        path("accounts/", include("accounts.urls")), # /api/accounts/... (login/logout, etc.)
+        path("orders/", include("orders.urls")),    # /api/orders/...
+        path("cart/", include("cart.urls")),
+        path("reviews/", include("reviews.urls")),
+        path("quotes/", include("apps.quotes.urls")),
+    ])),
+
+    # Allauth (web flows)
     path("accounts/", include("allauth.urls")),
-
-
-    # Optionally remove this:
-    # path('', include('products.urls')),  # only if you're not using React frontend
+    
+    # Legacy mobile endpoints (redirect to new structure)
+    path('mobile/', include('api.v1.mobile.urls')),
 ]
 
-# Serve media files during development
+# Media during dev
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

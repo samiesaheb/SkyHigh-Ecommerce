@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useCart } from "@/components/HeaderContext"; // ✅ import
+import Image from "next/image";
+import { useCart } from "@/components/cart/HeaderContext"; // ✅ import
+import { API_ENDPOINTS, buildImageUrl } from "@/lib/config";
 
 type OrderItem = {
   id: number;
@@ -12,12 +14,16 @@ type OrderItem = {
 };
 
 type LatestOrder = {
+  id: number;
   name: string;
   email: string;
   address: string;
   city: string;
   zip: string;
   items: OrderItem[];
+  status?: string;
+  is_paid?: boolean;
+  created_at?: string;
 };
 
 export default function ThankYouPage() {
@@ -25,7 +31,7 @@ export default function ThankYouPage() {
   const { refreshQuantity } = useCart(); // ✅ grab refresh
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/orders/latest/", {
+    fetch(API_ENDPOINTS.ORDERS.LATEST, {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -46,9 +52,7 @@ export default function ThankYouPage() {
   }
 
   const getImageUrl = (path: string) => {
-    if (path.startsWith("http")) return path;
-    if (path.startsWith("/media/")) return `http://localhost:8000${path}`;
-    return `http://localhost:8000/media/${path}`;
+    return buildImageUrl(path);
   };
 
   const total = order.items.reduce(
@@ -83,9 +87,11 @@ export default function ThankYouPage() {
               className="flex items-center justify-between border-b pb-4"
             >
               <div className="flex items-center gap-4">
-                <img
+                <Image
                   src={getImageUrl(item.main_image)}
                   alt={item.name}
+                  width={64}
+                  height={64}
                   className="w-16 h-16 object-cover rounded border"
                 />
                 <div>
@@ -104,13 +110,24 @@ export default function ThankYouPage() {
           Total: ฿{total.toFixed(2)}
         </p>
 
-        <div className="text-center mt-6">
-          <a
-            href="/products"
-            className="inline-block bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition"
-          >
-            Continue Shopping
-          </a>
+        <div className="text-center mt-6 space-y-4">
+          <div>
+            <a
+              href={`/order-status/${order.id}`}
+              className="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition mr-4"
+            >
+              Track Order
+            </a>
+            <a
+              href="/products"
+              className="inline-block bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition"
+            >
+              Continue Shopping
+            </a>
+          </div>
+          <p className="text-sm text-gray-600">
+            Order #{order.id} • {order.is_paid ? '✅ Paid' : '⏳ Payment Pending'}
+          </p>
         </div>
       </div>
     </div>

@@ -1,0 +1,88 @@
+{% extends "emails/base.html" %}
+
+{% block title %}Welcome to {{ company_name }}!{% endblock %}
+
+{% block header_title %}Welcome to Sky High! 🌟{% endblock %}
+{% block header_subtitle %}Your journey to beautiful skin starts here{% endblock %}
+
+{% block content %}
+<h2>Welcome, {{ user_name }}! 👋</h2>
+
+<p>Thank you for joining the {{ company_name }} family! We're thrilled to have you as part of our community of beauty enthusiasts.</p>
+
+<div style="margin: 32px 0; padding: 24px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 8px; text-align: center;">
+    <h3 style="color: #92400e; margin-bottom: 12px;">🎁 Welcome Bonus!</h3>
+    <p style="color: #92400e; font-size: 18px; margin: 0;"><strong>Get 10% off your first order</strong></p>
+    <p style="color: #92400e; font-size: 14px; margin-top: 8px;">Use code: <code style="background-color: #92400e; color: white; padding: 4px 8px; border-radius: 4px;">WELCOME10</code></p>
+</div>
+
+<h3 style="color: #1f2937; margin: 32px 0 16px 0;">As a member, you'll enjoy:</h3>
+
+<div style="margin: 24px 0;">
+    <div style="display: flex; align-items: center; margin: 16px 0; padding: 16px; background-color: #f9fafb; border-radius: 6px;">
+        <div style="font-size: 24px; margin-right: 16px;">🛍️</div>
+        <div>
+            <h4 style="margin: 0 0 4px 0; color: #1f2937;">Exclusive Product Access</h4>
+            <p style="margin: 0; color: #6b7280; font-size: 14px;">Be the first to try our latest cosmetic innovations</p>
+        </div>
+    </div>
+
+    <div style="display: flex; align-items: center; margin: 16px 0; padding: 16px; background-color: #f9fafb; border-radius: 6px;">
+        <div style="font-size: 24px; margin-right: 16px;">💰</div>
+        <div>
+            <h4 style="margin: 0 0 4px 0; color: #1f2937;">Special Member Discounts</h4>
+            <p style="margin: 0; color: #6b7280; font-size: 14px;">Enjoy exclusive savings on premium beauty products</p>
+        </div>
+    </div>
+
+    <div style="display: flex; align-items: center; margin: 16px 0; padding: 16px; background-color: #f9fafb; border-radius: 6px;">
+        <div style="font-size: 24px; margin-right: 16px;">💄</div>
+        <div>
+            <h4 style="margin: 0 0 4px 0; color: #1f2937;">Beauty Tips & Tutorials</h4>
+            <p style="margin: 0; color: #6b7280; font-size: 14px;">Expert advice and tutorials from professional makeup artists</p>
+        </div>
+    </div>
+
+    <div style="display: flex; align-items: center; margin: 16px 0; padding: 16px; background-color: #f9fafb; border-radius: 6px;">
+        <div style="font-size: 24px; margin-right: 16px;">🎯</div>
+        <div>
+            <h4 style="margin: 0 0 4px 0; color: #1f2937;">Personalized Recommendations</h4>
+            <p style="margin: 0; color: #6b7280; font-size: 14px;">Product suggestions tailored to your beauty preferences</p>
+        </div>
+    </div>
+</div>
+
+<div style="text-align: center; margin: 32px 0;">
+    <a href="{{ website_url }}/products" class="button">
+        Start Shopping Now
+    </a>
+</div>
+
+<p style="margin: 24px 0; padding: 20px; background-color: #e0f2fe; border-left: 4px solid #0891b2; border-radius: 4px;">
+    <strong>💡 Did you know?</strong> {{ company_name }} is a leading OEM/private label cosmetics manufacturer in Thailand, trusted by brands worldwide for premium quality products.
+</p>
+
+<h3 style="color: #1f2937; margin: 32px 0 16px 0;">Popular Categories to Explore:</h3>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin: 20px 0;">
+    <div style="text-align: center; padding: 16px; border: 1px solid #e5e7eb; border-radius: 6px;">
+        <div style="font-size: 32px; margin-bottom: 8px;">✨</div>
+        <strong>Facial Care</strong>
+    </div>
+    <div style="text-align: center; padding: 16px; border: 1px solid #e5e7eb; border-radius: 6px;">
+        <div style="font-size: 32px; margin-bottom: 8px;">🧴</div>
+        <strong>Body Care</strong>
+    </div>
+    <div style="text-align: center; padding: 16px; border: 1px solid #e5e7eb; border-radius: 6px;">
+        <div style="font-size: 32px; margin-bottom: 8px;">💇</div>
+        <strong>Hair Care</strong>
+    </div>
+    <div style="text-align: center; padding: 16px; border: 1px solid #e5e7eb; border-radius: 6px;">
+        <div style="font-size: 32px; margin-bottom: 8px;">💄</div>
+        <strong>Geometry</strong>
+    </div>
+</div>
+
+<p>If you have any questions about our products or need beauty advice, our customer service team is here to help!</p>
+
+<p style="margin-top: 32px; font-style: italic;">Welcome to the family, and stay beautiful! ✨</p>
+{% endblock %}

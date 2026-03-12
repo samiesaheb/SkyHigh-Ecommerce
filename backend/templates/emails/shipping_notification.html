@@ -1,0 +1,58 @@
+{% extends "emails/base.html" %}
+
+{% block title %}Your Order #{{ order.id }} Has Shipped! - {{ company_name }}{% endblock %}
+
+{% block header_title %}📦 Order Shipped!{% endblock %}
+{% block header_subtitle %}Your beauty products are on the way{% endblock %}
+
+{% block content %}
+<h2>Great news, {{ order.full_name }}! 🎉</h2>
+
+<p>Your order #{{ order.id }} has been carefully packaged and shipped. Your beautiful cosmetic products are now on their way to you!</p>
+
+<div class="order-details">
+    <div class="info-grid">
+        <div>
+            <h3 style="margin-bottom: 10px; color: #1f2937;">Shipping Information</h3>
+            <p><strong>Tracking Number:</strong><br>
+                <code style="background-color: #f3f4f6; padding: 4px 8px; border-radius: 4px; font-family: 'Courier New', monospace;">{{ tracking_number }}</code>
+            </p>
+            <p><strong>Ship Date:</strong> {{ ship_date }}</p>
+            <p><strong>Estimated Delivery:</strong> 3-5 business days</p>
+        </div>
+        <div>
+            <h3 style="margin-bottom: 10px; color: #1f2937;">Delivery Address</h3>
+            <p>{{ order.full_name }}</p>
+            <p>{{ order.address }}</p>
+            <p>{{ order.city }}, {{ order.zip }}</p>
+            <p>{{ order.country }}</p>
+        </div>
+    </div>
+</div>
+
+<div style="text-align: center; margin: 32px 0;">
+    <a href="https://skyhigh-inter.com/order-status/{{ order.id }}" class="button">
+        Track Your Package
+    </a>
+</div>
+
+<p style="margin: 24px 0; padding: 20px; background-color: #dbeafe; border-left: 4px solid #3b82f6; border-radius: 4px;">
+    <strong>📱 Pro Tip:</strong> Use the tracking number above to get real-time updates on your package's location and estimated delivery time.
+</p>
+
+<h3 style="color: #1f2937; margin: 24px 0 16px 0;">What to Expect:</h3>
+<ul style="margin: 16px 0; padding-left: 20px;">
+    <li>Your package is professionally wrapped to protect your cosmetic products</li>
+    <li>All items are secured to prevent damage during transit</li>
+    <li>You'll receive an SMS/email notification when your package is delivered</li>
+    <li>If you're not home, the courier will attempt delivery the next business day</li>
+</ul>
+
+<p style="margin: 24px 0; padding: 20px; background-color: #fecaca; border-left: 4px solid #dc2626; border-radius: 4px;">
+    <strong>🚨 Important:</strong> Please ensure someone is available to receive the package, or provide delivery instructions if you'll be away.
+</p>
+
+<p>Thank you for choosing {{ company_name }}! We hope you love your new beauty products.</p>
+
+<p style="margin-top: 32px; font-style: italic;">Stay beautiful! ✨</p>
+{% endblock %}

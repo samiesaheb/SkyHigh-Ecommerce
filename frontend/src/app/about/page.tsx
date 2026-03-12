@@ -1,41 +1,77 @@
 "use client";
 
-import React from "react";
-
 export default function AboutPage() {
   return (
-    <div className="max-w-5xl mx-auto px-6 py-16">
-      <h1 className="text-4xl font-extrabold text-red-600 mb-6">About Sky High International Co., Ltd.</h1>
+    <main className="w-full bg-background">
+      <div className="container max-w-4xl mx-auto px-6 sm:px-8 lg:px-12 py-20 lg:py-32">
+        {/* Header */}
+        <header className="mb-20 text-center">
+          <div className="divider mx-auto max-w-16 mb-8" />
+          <h1 className="text-3xl lg:text-4xl font-light tracking-tight text-foreground mb-6">
+            About Us
+          </h1>
+          <p className="text-lg lg:text-xl font-light text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+            Crafting premium cosmetics with science, elegance, and sustainability since 2000.
+          </p>
+        </header>
 
-      <p className="text-white-700 text-lg leading-relaxed mb-6">
-        Founded in 2000, <strong>Sky High International Co., Ltd.</strong> is a leading OEM/private label cosmetic manufacturer based in Samutprakarn, Thailand. With over two decades of experience, we specialize in crafting high-quality skin care, body care, and hair care products for clients across the GCC and African Union countries.
-      </p>
+        <div className="prose prose-lg max-w-none">
+          {/* Company Overview */}
+          <section className="mb-16">
+            <h2 className="text-xl font-light tracking-tight text-foreground mb-6 pb-2 border-b border-border/20">
+              Our Company
+            </h2>
+            <p className="text-muted-foreground leading-relaxed mb-4">
+              <span className="font-medium text-foreground">Sky High International Co., Ltd.</span>, established in 2000, is a premier OEM/private label cosmetic manufacturer headquartered in Samut Prakan, Thailand. With over two decades of trusted excellence, we specialize in developing high-quality skin care, body care, and hair care solutions for discerning clients across the GCC and African Union markets.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              Backed by our <span className="font-medium text-foreground">ISO 9001:2015 certification</span>, we uphold rigorous standards of safety, innovation, and product quality. Our dedicated in-house R&D team partners with each client to deliver bespoke formulations using <span className="font-medium text-foreground">non-toxic, globally compliant ingredients</span>.
+            </p>
+          </section>
 
-      <p className="text-white-700 text-lg leading-relaxed mb-6">
-        We are proud to operate with <strong>ISO 9001:2015 certification</strong>, ensuring the highest standards in manufacturing, safety, and quality control. Our internal R&D team works closely with clients to develop formulations tailored to their market needs, always using <strong>non-toxic, internationally compliant ingredients</strong>.
-      </p>
+          {/* Philosophy */}
+          <section className="mb-16">
+            <h2 className="text-xl font-light tracking-tight text-foreground mb-6 pb-2 border-b border-border/20">
+              Our Philosophy
+            </h2>
+            <p className="text-muted-foreground leading-relaxed mb-4">
+              At Sky High, we believe in going beyond manufacturing — we empower brands with cutting-edge cosmetic science, precise craftsmanship, and seamless service. Our motto reflects our ethos:
+            </p>
+            <div className="border-l-4 border-border/50 pl-6 my-6">
+              <p className="text-lg font-light text-foreground italic">
+                &ldquo;You need it? We make it!&rdquo;
+              </p>
+            </div>
+          </section>
 
-      <p className="text-white-700 text-lg leading-relaxed mb-6">
-        At Sky High, our philosophy is simple: <em>"You need it? We make it!"</em> We are committed to delivering innovative, user- and environment-friendly cosmetic products through a team of 75 dedicated professionals.
-      </p>
+          {/* Mission */}
+          <section className="mb-16">
+            <h2 className="text-xl font-light tracking-tight text-foreground mb-6 pb-2 border-b border-border/20">
+              Our Mission
+            </h2>
+            <p className="text-muted-foreground leading-relaxed">
+              To bring the best to everything we touch — from ingredient selection to customer experience — while maintaining uncompromising quality in a competitive market. We handpick raw materials that meet international benchmarks and craft products rooted in safety, efficacy, and trust.
+            </p>
+          </section>
 
-      <h2 className="text-2xl font-bold text-white-800 mt-10 mb-4">Our Mission</h2>
-      <p className="text-white-700 text-lg leading-relaxed mb-6">
-        To bring the best to everything we touch and maintain the highest quality standards in a competitive market. We select raw materials that comply with international standards and formulate safe, effective products that our partners can trust.
-      </p>
+          {/* Vision */}
+          <section className="mb-20">
+            <h2 className="text-xl font-light tracking-tight text-foreground mb-6 pb-2 border-b border-border/20">
+              Our Vision
+            </h2>
+            <p className="text-muted-foreground leading-relaxed">
+              To be a global leader in innovative, sustainable, and people-friendly cosmetics. We aim to expand our market reach while preserving the values of integrity, excellence, and responsiveness that define our legacy.
+            </p>
+          </section>
+        </div>
 
-      <h2 className="text-2xl font-bold text-white-800 mt-10 mb-4">Our Vision</h2>
-      <p className="text-white-700 text-lg leading-relaxed mb-6">
-        To develop innovative, high-quality, and eco-conscious cosmetic products, grow our presence in global markets, and continue delivering excellent customer service with integrity and dedication.
-      </p>
-
-      <h2 className="text-2xl font-bold text-white-800 mt-10 mb-4">Contact Us</h2>
-      <p className="text-white-700 text-lg leading-relaxed">
-        📍 524 Moo 7, Bangpoo Mai, Muang, Samutprakarn 10280, Thailand<br />
-        ☎️ Tel: (662) 3233517 - 20<br />
-        📠 Fax: (662) 23233516<br />
-        📧 Email: <a href="mailto:samie@skyhigh.co.th" className="text-red-600 underline">samie@skyhigh.co.th</a>
-      </p>
-    </div>
+        {/* Last Updated */}
+        <div className="text-center pt-8 border-t border-border/20">
+          <p className="caption-text text-muted-foreground">
+            Last updated: {new Date().toLocaleDateString()}
+          </p>
+        </div>
+      </div>
+    </main>
   );
 }

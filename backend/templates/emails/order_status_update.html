@@ -1,0 +1,79 @@
+{% extends "emails/base.html" %}
+
+{% block title %}Order #{{ order.id }} Status Update - {{ company_name }}{% endblock %}
+
+{% block header_title %}📋 Order Status Update{% endblock %}
+{% block header_subtitle %}Your order has been updated{% endblock %}
+
+{% block content %}
+<h2>Hi {{ order.full_name }}! 👋</h2>
+
+<p>We have an update on your order #{{ order.id }}.</p>
+
+<div class="order-details">
+    <div class="info-grid">
+        <div>
+            <h3 style="margin-bottom: 10px; color: #1f2937;">Order Information</h3>
+            <p><strong>Order Number:</strong> #{{ order.id }}</p>
+            <p><strong>Order Date:</strong> {{ order.created_at|date:"F d, Y" }}</p>
+            <p><strong>Previous Status:</strong>
+                <span class="status-badge status-{{ old_status }}">{{ old_status|title }}</span>
+            </p>
+            <p><strong>New Status:</strong>
+                <span class="status-badge status-{{ new_status }}">{{ new_status|title }}</span>
+            </p>
+        </div>
+        <div>
+            <h3 style="margin-bottom: 10px; color: #1f2937;">Delivery Address</h3>
+            <p>{{ order.full_name }}</p>
+            <p>{{ order.address }}</p>
+            <p>{{ order.city }}, {{ order.zip }}</p>
+            <p>{{ order.country }}</p>
+        </div>
+    </div>
+</div>
+
+<div style="margin: 32px 0; padding: 24px; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-radius: 8px; text-align: center;">
+    <h3 style="color: #1e40af; margin-bottom: 12px;">📦 {{ status_message|title }}</h3>
+    {% if new_status == 'processing' %}
+        <p style="color: #1e40af; margin: 0;">We're carefully preparing your beauty products for shipment.</p>
+    {% elif new_status == 'shipped' %}
+        <p style="color: #1e40af; margin: 0;">Your package is on its way! You should receive it within 3-5 business days.</p>
+    {% elif new_status == 'delivered' %}
+        <p style="color: #1e40af; margin: 0;">Your order has been successfully delivered. Enjoy your new beauty products!</p>
+    {% elif new_status == 'cancelled' %}
+        <p style="color: #1e40af; margin: 0;">Your order has been cancelled. If you have questions, please contact our support team.</p>
+    {% endif %}
+</div>
+
+<div style="text-align: center; margin: 32px 0;">
+    <a href="https://skyhigh-inter.com/order-status/{{ order.id }}" class="button">
+        View Order Details
+    </a>
+</div>
+
+{% if new_status == 'shipped' and order.tracking_number %}
+<p style="margin: 24px 0; padding: 20px; background-color: #f0fdf4; border-left: 4px solid #16a34a; border-radius: 4px;">
+    <strong>📱 Track Your Package:</strong>
+    <code style="background-color: #16a34a; color: white; padding: 4px 8px; border-radius: 4px; font-family: 'Courier New', monospace;">{{ order.tracking_number }}</code>
+</p>
+{% endif %}
+
+{% if new_status == 'delivered' %}
+<h3 style="color: #1f2937; margin: 32px 0 16px 0;">Care Instructions:</h3>
+<ul style="margin: 16px 0; padding-left: 20px;">
+    <li>Store your cosmetic products in a cool, dry place</li>
+    <li>Keep products away from direct sunlight</li>
+    <li>Check expiration dates before use</li>
+    <li>Always patch test new products before full application</li>
+</ul>
+
+<p style="margin: 24px 0; padding: 20px; background-color: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 4px;">
+    <strong>💄 Loving your products?</strong> We'd love to hear from you! Consider leaving a review or sharing your experience with us.
+</p>
+{% endif %}
+
+<p>If you have any questions about your order, please don't hesitate to contact our customer service team.</p>
+
+<p style="margin-top: 32px; font-style: italic;">Thank you for choosing {{ company_name }}! ✨</p>
+{% endblock %}

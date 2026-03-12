@@ -6,3 +6,4 @@ db.sqlite3
 *.pyc
 /staticfiles/
 frontend/dist/
+.DS_Store

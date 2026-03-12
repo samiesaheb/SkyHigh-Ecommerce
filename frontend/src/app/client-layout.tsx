@@ -1,50 +1,78 @@
 "use client";
-
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import { CartProvider } from "@/components/HeaderContext";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import dynamic from "next/dynamic";
+import { CartProvider } from "@/components/cart/HeaderContext";
+import { UserProvider } from "@/components/auth/UserContext";
+import { ErrorProvider } from "@/components/error/ErrorContext";
+import { WishlistProvider } from "@/components/wishlist/WishlistContext";
+import { SearchProvider, useSearch } from "@/components/search/SearchContext";
+import ErrorDisplay from "@/components/error/ErrorDisplay";
+import ErrorBoundary from "@/components/error/ErrorBoundary";
+import GlobalErrorBoundary from "@/components/error/GlobalErrorBoundary";
+import { MobileNavigationProvider, useMobileNavigation } from "@/components/layout/MobileNavigationContext";
+import { API_ENDPOINTS } from "@/lib/config";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { AnimatePresence, motion } from "framer-motion";
 
-// ✅ Stripe public key from environment variable
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
-);
+// Dynamic imports for code splitting
+const Header = dynamic(() => import("@/components/layout/Header"), {
+  loading: () => <div className="h-20 bg-background/80 animate-pulse" />,
+});
 
-function Spinner() {
+const Footer = dynamic(() => import("@/components/layout/Footer"), {
+  loading: () => <div className="h-64 bg-background/80 animate-pulse" />,
+});
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!);
+
+function LayoutContent({ children }: { children: React.ReactNode }) {
+  const { isOpen } = useMobileNavigation();
+  const { isSearchOpen } = useSearch();
+
   return (
-    <svg
-      className="animate-spin h-10 w-10 text-red-600"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      aria-label="Loading"
-      role="img"
-    >
-      <circle
-        className="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="4"
-      ></circle>
-      <path
-        className="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-      ></path>
-    </svg>
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <main
+        id="main-content"
+        className={`flex-1 w-full bg-background text-foreground pt-20 transition-all duration-300 ${
+          isOpen ? 'blur-sm' : ''
+        } ${
+          isSearchOpen ? 'blur-md scale-105' : ''
+        }`}
+      >
+        {/* Added pt-20 to account for fixed header height */}
+        <div className="w-full">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key="page"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+                className="page-transition"
+              >
+                <ErrorBoundary>
+                  {children}
+                </ErrorBoundary>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
+      </main>
+      <div className={`${isSearchOpen ? 'blur-md scale-105 transition-all duration-300' : 'transition-all duration-300'}`}>
+        <Footer />
+      </div>
+      <ErrorDisplay />
+    </div>
   );
 }
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
-  const [csrfReady, setCsrfReady] = useState(false);
-
   useEffect(() => {
-    fetch("http://localhost:8000/api/csrf/", {
+    // Initialize CSRF token in the background without blocking UI
+    fetch(API_ENDPOINTS.CSRF, {
       credentials: "include",
     })
       .then((res) => {
@@ -53,40 +81,29 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       })
       .then((data) => {
         console.log("✅ CSRF success:", data);
-        setCsrfReady(true);
       })
       .catch((err) => console.error("❌ CSRF fetch failed:", err));
   }, []);
 
   return (
-    <CartProvider>
-      <Elements stripe={stripePromise}>
-        <Header />
-        <main className="flex-1 w-full">
-          <div className="bg-black text-white w-full">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6">
-              <AnimatePresence mode="wait" initial={false}>
-                {csrfReady ? (
-                  <motion.div
-                    key="page"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {children}
-                  </motion.div>
-                ) : (
-                  <div className="flex justify-center items-center h-48">
-                    <Spinner />
-                  </div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </Elements>
-    </CartProvider>
+    <GlobalErrorBoundary>
+      <ErrorProvider>
+        <UserProvider>
+          <CartProvider>
+            <WishlistProvider>
+              <SearchProvider>
+                <MobileNavigationProvider>
+                  <Elements stripe={stripePromise}>
+                    <LayoutContent>
+                      {children}
+                    </LayoutContent>
+                  </Elements>
+                </MobileNavigationProvider>
+              </SearchProvider>
+            </WishlistProvider>
+        </CartProvider>
+      </UserProvider>
+    </ErrorProvider>
+    </GlobalErrorBoundary>
   );
 }
