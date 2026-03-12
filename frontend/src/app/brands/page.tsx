@@ -192,7 +192,7 @@ export default function BrandsPage() {
             {otherBrands.length === 0 && brands.length > 0 && (
               <div className="p-4 rounded-md border bg-muted/20 text-muted-foreground border-border/20 text-sm mb-6">
                 <p>
-                  Showing all brands (no non-Geometry brands found). If this isn't expected, confirm the slug naming
+                  Showing all brands (no non-Geometry brands found). If this isn&apos;t expected, confirm the slug naming
                   or switch to a backend flag (e.g., <code className="bg-muted/50 px-1 rounded">is_partner</code>).
                 </p>
               </div>
