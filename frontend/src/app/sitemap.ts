@@ -3,8 +3,8 @@ import { siteConfig } from "@/lib/seo";
 
 // You can fetch dynamic data here from your API
 async function getProducts() {
+  if (!process.env.NEXT_PUBLIC_API_URL) return [];
   try {
-    // Replace with your actual API endpoint
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/`, {
       next: { revalidate: 3600 }, // Revalidate every hour
     });
@@ -22,8 +22,8 @@ async function getProducts() {
 }
 
 async function getCategories() {
+  if (!process.env.NEXT_PUBLIC_API_URL) return [];
   try {
-    // Replace with your actual API endpoint
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories/`, {
       next: { revalidate: 3600 },
     });
