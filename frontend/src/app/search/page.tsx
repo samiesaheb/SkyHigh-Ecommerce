@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import { Suspense, useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Filter, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -9,7 +9,7 @@ import SearchFilters from '@/components/search/SearchFilters';
 import AdvancedSearchResults from '@/components/search/AdvancedSearchResults';
 import { searchEngine, SearchFilters as SearchFiltersType, SearchResponse, parseUrlFilters } from '@/lib/search';
 
-export default function SearchPage() {
+function SearchPageContent() {
   const searchParams = useSearchParams();
   const [searchResponse, setSearchResponse] = useState<SearchResponse | null>(null);
   const [filters, setFilters] = useState<SearchFiltersType>({});
@@ -311,5 +311,13 @@ export default function SearchPage() {
         />
       )}
     </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={null}>
+      <SearchPageContent />
+    </Suspense>
   );
 }

@@ -1,5 +1,6 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import ClientLayout from "./client-layout";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import WebVitalsReporter from "@/components/analytics/WebVitalsReporter";
@@ -38,7 +39,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="scroll-smooth">
       <body className="bg-background text-foreground font-sans antialiased min-h-screen flex flex-col">
-        <GoogleAnalytics />
+        <Suspense fallback={null}>
+          <GoogleAnalytics />
+        </Suspense>
         <WebVitalsReporter />
         <OrganizationSchema
           organization={{

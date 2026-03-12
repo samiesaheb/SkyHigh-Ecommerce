@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic';
 
-import { useEffect, useState, useCallback } from "react";
+import { Suspense, useEffect, useState, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -23,7 +23,7 @@ type Brand = {
   slug: string;
 };
 
-export default function ProductsPage() {
+function ProductsPageContent() {
   const searchParams = useSearchParams();
 
   const [products, setProducts] = useState<SearchResult[]>([]);
@@ -538,5 +538,13 @@ export default function ProductsPage() {
         />
       )}
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={null}>
+      <ProductsPageContent />
+    </Suspense>
   );
 }
