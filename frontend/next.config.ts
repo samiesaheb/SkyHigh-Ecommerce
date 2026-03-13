@@ -71,11 +71,6 @@ const nextConfig: NextConfig = {
   },
   // Move server external packages to top level
   serverExternalPackages: ['sharp'],
-
-  // Enable ESLint during builds
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   // Enable TypeScript checking during builds
   typescript: {
     ignoreBuildErrors: true,
