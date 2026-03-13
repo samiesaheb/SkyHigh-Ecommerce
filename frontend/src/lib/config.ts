@@ -1,10 +1,27 @@
 const isDevelopment = process.env.NODE_ENV === 'development';
 const isMobile = process.env.NEXT_PUBLIC_TARGET === 'mobile';
 
+const normalizeAbsoluteUrl = (rawUrl?: string) => {
+  if (!rawUrl) return null;
+
+  const trimmed = rawUrl.trim();
+  if (!trimmed) return null;
+
+  const withProtocol = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+
+  try {
+    const parsed = new URL(withProtocol);
+    return parsed.toString().replace(/\/$/, '');
+  } catch {
+    return null;
+  }
+};
+
 // Get local network IP for mobile testing
 const getApiUrl = () => {
-  if (process.env.NEXT_PUBLIC_API_URL) {
-    return process.env.NEXT_PUBLIC_API_URL;
+  const envApiUrl = normalizeAbsoluteUrl(process.env.NEXT_PUBLIC_API_URL);
+  if (envApiUrl) {
+    return envApiUrl;
   }
   if (isDevelopment) {
     return isMobile ? 'http://192.168.1.120:8000' : 'http://localhost:8000';
@@ -13,9 +30,16 @@ const getApiUrl = () => {
 };
 
 const getMediaUrl = () => {
-  if (process.env.NEXT_PUBLIC_MEDIA_URL) {
-    return process.env.NEXT_PUBLIC_MEDIA_URL;
+  const envMediaUrl = normalizeAbsoluteUrl(process.env.NEXT_PUBLIC_MEDIA_URL);
+  if (envMediaUrl) {
+    return envMediaUrl;
   }
+
+  const envApiUrl = normalizeAbsoluteUrl(process.env.NEXT_PUBLIC_API_URL);
+  if (envApiUrl) {
+    return `${envApiUrl}/media`;
+  }
+
   if (isDevelopment) {
     return isMobile ? 'http://192.168.1.120:8000/media' : 'http://localhost:8000/media';
   }

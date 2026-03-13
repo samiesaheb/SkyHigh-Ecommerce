@@ -1,9 +1,34 @@
 import type { NextConfig } from "next";
 
+function getRemotePatternFromEnv(urlValue?: string, pathname = "/**") {
+  if (!urlValue) return null;
+
+  const withProtocol = /^https?:\/\//i.test(urlValue) ? urlValue : `https://${urlValue}`;
+
+  try {
+    const parsed = new URL(withProtocol);
+    return {
+      protocol: parsed.protocol.replace(":", "") as "http" | "https",
+      hostname: parsed.hostname,
+      port: parsed.port,
+      pathname,
+    };
+  } catch {
+    return null;
+  }
+}
+
 // Bundle analyzer setup
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
+
+const envMediaPattern = getRemotePatternFromEnv(process.env.NEXT_PUBLIC_MEDIA_URL, "/**");
+const envApiPattern = getRemotePatternFromEnv(process.env.NEXT_PUBLIC_API_URL, "/media/**");
+
+const dynamicRemotePatterns = [envMediaPattern, envApiPattern].filter(
+  (pattern): pattern is NonNullable<typeof pattern> => Boolean(pattern)
+);
 
 const nextConfig: NextConfig = {
   images: {
@@ -39,6 +64,7 @@ const nextConfig: NextConfig = {
         hostname: "cdn.your-domain.com",
         pathname: "/**",
       },
+      ...dynamicRemotePatterns,
     ],
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
