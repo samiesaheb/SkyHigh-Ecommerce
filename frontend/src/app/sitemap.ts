@@ -1,13 +1,45 @@
 import { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/seo";
 
+const REQUEST_TIMEOUT_MS = 8000;
+
+function normalizeApiBaseUrl(rawUrl?: string): string | null {
+  if (!rawUrl) return null;
+
+  const trimmed = rawUrl.trim();
+  if (!trimmed) return null;
+
+  const withProtocol = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+
+  try {
+    const url = new URL(withProtocol);
+    return url.origin;
+  } catch {
+    return null;
+  }
+}
+
+async function fetchJsonWithTimeout(url: string) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+  try {
+    return await fetch(url, {
+      next: { revalidate: 3600 },
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 // You can fetch dynamic data here from your API
 async function getProducts() {
-  if (!process.env.NEXT_PUBLIC_API_URL) return [];
+  const apiBaseUrl = normalizeApiBaseUrl(process.env.NEXT_PUBLIC_API_URL);
+  if (!apiBaseUrl) return [];
+
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/`, {
-      next: { revalidate: 3600 }, // Revalidate every hour
-    });
+    const response = await fetchJsonWithTimeout(`${apiBaseUrl}/api/products/`);
 
     if (!response.ok) {
       return [];
@@ -22,11 +54,11 @@ async function getProducts() {
 }
 
 async function getCategories() {
-  if (!process.env.NEXT_PUBLIC_API_URL) return [];
+  const apiBaseUrl = normalizeApiBaseUrl(process.env.NEXT_PUBLIC_API_URL);
+  if (!apiBaseUrl) return [];
+
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories/`, {
-      next: { revalidate: 3600 },
-    });
+    const response = await fetchJsonWithTimeout(`${apiBaseUrl}/api/categories/`);
 
     if (!response.ok) {
       return [];
